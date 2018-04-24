@@ -15,8 +15,8 @@
 <?php
 /**
   * @author maas(maasdruck@gmail.com)
-  * @date 2018/02/26
-  * @version v1.04
+  * @date 2018/04/24
+  * @version v1.05
   * @brief 演示 PHP 自动清理缓存
   */
 // 缓存文件名
@@ -33,6 +33,11 @@ $temp = ob_get_contents();
 ob_end_clean();
 file_put_contents($path.md5(urlencode($word[0])), $temp, LOCK_EX);
 // 自动清理超时缓存
+if (file_exists('mark2')) {
+    if ((time() - filemtime('mark2')) > $cache) {
+        unlink('mark2');
+    }
+}
 if (file_exists('mark1') && !file_exists('mark2')) {
     if ((time() - filemtime('mark1')) > $cachetime) {
         unlink('mark1');
